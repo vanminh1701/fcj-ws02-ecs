@@ -5,11 +5,11 @@ weight : 1
 chapter : false
 ---
 
-## Xây dựng ứng dụng trên Amazon ECS
+## Build application on Amazon ECS
 
-#### Tổng quan
+#### Overview
 
-Trong bài viết này sẽ giới thiệu về  tổng quan về dịch vụ Amazon ECS, các thành phần xây dựng nên dịch vụ như cách triển khai CD cho một ứng dụng mà dịch vụ này hỗ trỡ, cách kết nối với ứng dụng từ internet và kết nối giữa ứng dụng với ứng dụng mà không cần đi ra internet. Ngoài ra bài biết cũng giới thiệu về dịch vụ CloudFormation giúp xây dựng hệ thống bằng IaC một cách nhanh chóng và dễ dàng.
+In this workshop, we will show an overview of the Amazon ECS service, the components that make up the service, such as how to deploy a CD for an application that this service supports, how to connect to the application from the internet, and how to connect to the application. Connect service-to-service without going to the internet. In addition, the workshop also introduces the CloudFormation service to help build system using IaC quickly and easily.
 
 #### Content
 

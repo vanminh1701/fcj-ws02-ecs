@@ -1,5 +1,5 @@
 ---
-title : "Introduction ECS"
+title : "Giới thiệu ECS"
 date :  "`r Sys.Date()`" 
 weight : 1 
 chapter : false

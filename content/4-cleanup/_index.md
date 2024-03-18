@@ -5,22 +5,23 @@ weight: 4
 pre: "<b>4. </b>"
 ---
 
-Một ưu điểm khi quản lý hạ tầng bằng CloudFormation là các tài nguyên sẽ được tập trung quản lý trong các *stack*. Vì vậy bạn có thể dễ dàng tắt hệ thống đi khi không cần dùng đến cho hệ thống chỉ chạy trong khung giờ cố định, hoặc không dùng đến hệ thống này nữa.
+One advantage of managing infrastructure with CloudFormation is that resources will be centrally managed in *stacks*. Therefore, you can easily turn off the system when you do not need it or let the system only run during a fixed time frame, or no longer use this system.
 
-Các Stack sẽ được xóa đi theo thứ tự ngược với lúc khởi tạo vì CloudFormation sẽ giúp nhận biết Stack Export value đang được dùng ở những Stack khác và không cho phép bạn xóa stack hiện tại đi.
-Một ví dụ thông báo như hình bên dưới:
+Stacks will be deleted in the reverse order of initialization because CloudFormation will help identify the Stack Export value being used in other Stacks and will not allow you to delete the current stack.
+An example notification is as shown below:
 
 ![Cannot Remove stack](/images/4.1-cannot-remove-stack.png)
 
-Khi xóa parent stack, các nested stack sẽ được xóa theo nên bạn chỉ cần xóa ECS stack xong và sau đó xóa VPC stack.
+When deleting the parent stack, the nested stacks will be deleted, so you just need to delete the ECS stack and then the VPC stack.
 
-Để xóa stack, bạn truy cập vào CloudFormation Console, chọn Stack cần xóa và chọn **Delete** ở khung bên phải trong phần mô trả chi tiết của stack.
+To delete a stack, access the CloudFormation Console, select the Stack you want to delete and select **Delete** in the right pane in the detailed description of the stack.
+
 
 ![Remove stack](/images/4.2-remove-stack.png)
 
-Truy cập vào S3 console để xóa bucket đã tạo để chứa CloudFormation đã tạo trước đó. Các bước xóa S3:
+Access the S3 Console to delete the bucket created to contain the previously created CloudFormation. To delete S3:
 
-1. Vì S3 bucket có chứa các object nên cần làm trống trước khi có thể xoắ bucket đi. Chọn **Empty** để xóa các object bên trong bucket.
-2. Chọn **Delete** để xóa bucket
+1. Because the S3 bucket contains objects, which needs to be emptied before the bucket can be deleted. Select **Empty** to delete objects inside the bucket.
+2. Select **Delete** to delete the bucket
 
 ![Remove stack](/images/4.3-remove-s3-bucket.png)
