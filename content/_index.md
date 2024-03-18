@@ -5,9 +5,15 @@ weight : 1
 chapter : false
 ---
 
-Một ưu điểm khi quản lý hạ tầng bằng CloudFormation là các tài nguyên sẽ được tập trung quản lý trong các *stack*. Vì vậy bạn có thể dễ dàng tắt hệ thống đi khi không cần dùng đến cho hệ thống chỉ chạy trong khung giờ cố định, hoặc không dùng đến hệ thống này nữa.
+## Xây dựng ứng dụng trên Amazon ECS
 
-Các Stack sẽ được xóa đi theo thứ tự ngược với lúc khởi tạo vì CloudFormation sẽ giúp nhận biết Stack Export value đang được dùng ở những Stack khác và không cho phép bạn xóa stack hiện tại đi.
-Một ví dụ thông báo như hình bên dưới:
+#### Tổng quan
 
-![Cannot Remove stack](/images/4.1-cannot-remove-stack.png)
+Trong bài viết này sẽ giới thiệu về  tổng quan về dịch vụ Amazon ECS, các thành phần xây dựng nên dịch vụ như cách triển khai CD cho một ứng dụng mà dịch vụ này hỗ trỡ, cách kết nối với ứng dụng từ internet và kết nối giữa ứng dụng với ứng dụng mà không cần đi ra internet. Ngoài ra bài biết cũng giới thiệu về dịch vụ CloudFormation giúp xây dựng hệ thống bằng IaC một cách nhanh chóng và dễ dàng.
+
+#### Content
+
+1. [Introduction ECS](1-introduce/)
+2. [Introduction CloudFormation](2-intro-cloudformation/)
+3. [Application Demo](3-demo)
+4. [Clean up](4-cleanup/)
