@@ -1,0 +1,9 @@
+FROM hugomods/hugo:latest as build-bundle
+
+COPY . /src
+
+RUN hugo
+
+FROM scratch as bundle
+COPY --from=build-bundle /src/public public
+

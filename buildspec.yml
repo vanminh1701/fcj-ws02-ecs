@@ -1,0 +1,25 @@
+# Do not change version. 
+#This is the version of aws buildspec, not the version of your buldspec file.
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - ECR_URI=992382856114.dkr.ecr.us-east-1.amazonaws.com
+      - REPO_URI=$ECR_URI/ws002
+      - echo Authen ECR
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_URI
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+  build:
+    commands:
+      - echo Build started on `date`
+      - docker build --output=output --target=bundle -f Dockerfile.build .
+      - docker build -t $REPO_URI:latest .
+      - docker tag $REPO_URI:latest $REPO_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - docker push $REPO_URI:latest
+      - docker push $REPO_URI:$IMAGE_TAG
+
