@@ -6,23 +6,24 @@ chapter : false
 pre : " <b> 3.1 </b> "
 ---
 
-Phần này sẽ đi vào các bước để triển khai một ứng dụng áp dụng các kiến thức đã giới thiệu ở phần trên.
+This section will go into the steps to deploy an application applying the knowledge introduced in the above section.
 
-#### Điều kiện tiên quyết
+#### Prerequisites
 
-Trên máy bạn đã cài đặt AWS CLI và đã cấu hình kết nối với một IAM user có đủ quyền.
+- On the machine you have installed the AWS CLI and configured the connection with an IAM user with sufficient rights.
 
-Sử dụng các template trong Github Repo sau: [fcj-ws02-cfn-ecs](https://github.com/vanminh1701/fcj-ws02-cfn-ecs)
+- Use the following Github Repo templates: [fcj-ws02-cfn-ecs](https://github.com/vanminh1701/fcj-ws02-cfn-ecs)
 
-#### Thiết kế ứng dụng
+#### Application Architecture
 
-![CloudFormation Architecture](/images/3.1-cloudformation-architecture.png)
-Ứng dụng sẽ được chia thành 2 Stack lớn là VPC và ECS. Mục tiêu khi tách VPC độc lập khỏi ECS cluster để  có thể mở rộng thiết kế cho các dịch vụ khác dùng chung 1 VPC.CloudFormation Stack có tính năng chia sẻ thông tin các tài nguyên để các Stack khác có thể dùng chung. Ví dụ trong bài này, ECS Stack sẽ dùng các thông số `PrivateSubnets` và `VpcId` từ VPC Stack để tạo các tài nguyên.
+![CloudFormation Architecture](/images/3.1-cloudformation-architecture.svg)
 
-Các bước để cài đặt ứng dụng:
+The application will be divided into 2 large stacks: VPC and ECS. The goal of separating the independent VPC from the ECS cluster is to be able to expand the design for other services sharing the same VPC. CloudFormation Stack has the feature of sharing resource information so that other Stack can share it. For example in this article, ECS Stack will use the `PrivateSubnets` and `VpcId` parameters from the VPC Stack to create resources.
 
-- Khởi tạo VPC stack
-  Để tiến hành tạo VPC stack, khởi chạy lệnh trong terminal:
+Steps to install the application:
+
+- Initialize VPC stack
+   To proceed with creating a VPC stack, launch the command in terminal:
 
 ```bash
 aws cloudformation create-stack \
@@ -31,7 +32,7 @@ aws cloudformation create-stack \
   --parameters ParameterKey=EnvironmentName,ParameterValue=ws2-vpc
 ```
 
-Kết quả trả về từ terminal như sau và ban có thể thấy được 1 Stack được tạo trên CloudFormation Console.
+The result returned from the terminal is as follows and you can see a Stack created on CloudFormation Console.
 
 ```sh
 {
@@ -41,7 +42,7 @@ Kết quả trả về từ terminal như sau và ban có thể thấy được 
 
 ![CloudFormation Architecture](/images/3.4-cloudformation-vpc-console.png)
 
-Ngoài ra bạn có thể thay đổi thông tin mặc định của VPC stack bằng cách thêm vào tùy chọn `--parameters`. Các thông số cho phép thay đổi được liệt kê trong mục `Parameters`, gồm có: *VpcCIDR, PublicSubnet1CIDR, PublicSubnet2CIDR, PrivateSubnet1CIDR, PrivateSubnet2CIDR*
+Additionally, you can change the default information of the VPC stack by adding the `--parameters` option. Parameters that can be changed are listed in the `Parameters` section, including: *VpcCIDR, PublicSubnet1CIDR, PublicSubnet2CIDR, PrivateSubnet1CIDR, PrivateSubnet2CIDR*
 
 ```yml
 Parameters:
@@ -70,18 +71,18 @@ Parameters:
     Default: 10.192.21.0/24
 ```
 
-- Tạo 1 S3 bucket để lưu các template.
+- Create an S3 bucket to save templates.
 
-Dối với bước 1 vì VPC Stack độc lập và chỉ cần 1 file template nên có thể  link trực tiếp từ local file. Nhưng ECS bao gồm nhiều *nested stack* và CloudFormation cần biết đường dẫn tới các template đó bằng thông số `TemplateURL`. Vì vậy cần phải tạo 1 S3 bucket lưu các template trước khi tạo CloudFormation.
+For step 1, because VPC Stack is independent and only needs 1 template file, it can be linked directly from the local file. But ECS consists of multiple *nested stacks* and CloudFormation needs to know the path to those templates using the `TemplateURL` parameter. Therefore, it is necessary to create an S3 bucket to store templates before creating CloudFormation.
 
-Để nhanh chóng upload file template lên S3, chúng ta sẽ sử dụng lệnh để  đồng bộ thư mục làm việc hiện tại lên s3 Bucket
+To quickly upload the template file to S3, we will use the command to sync the current working directory to the s3 Bucket
 
 ```sh
 S3_STACK_BUCKET=ws2-s3
 aws s3 sync . s3://$S3_STACK_BUCKET/ --exclude ".git/*"
 ```
 
-- Sau khi upload các template lên s3, chúng ta có thể tạo ECS task bằng lệnh:
+- After uploading the templates to s3, we can create an ECS task with the command:
   
 ```sh
 STACK_NAME=ws2-ecs
@@ -93,5 +94,6 @@ aws cloudformation create-stack --stack-name $STACK_NAME \
     --capabilities CAPABILITY_IAM
 ```
 
-Kêt quả thu được trên Console:
+The result in Console:
+
 ![CloudFormation Architecture](/images/3.5-ecs-stack.png)

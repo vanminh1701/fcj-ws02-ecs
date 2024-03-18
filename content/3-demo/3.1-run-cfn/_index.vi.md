@@ -12,11 +12,12 @@ Phần này sẽ đi vào các bước để triển khai một ứng dụng áp
 
 Trên máy bạn đã cài đặt AWS CLI và đã cấu hình kết nối với một IAM user có đủ quyền.
 
-Sử dụng các template trong Github Repo sau: [fcj-ws02-cfn-ecs](https://github.com/vanminh1701/fcj-ws02-cfn-ecs)
+Sử dụng các template trong Github Repo sau: [**fcj-ws02-cfn-ecs**](https://github.com/vanminh1701/fcj-ws02-cfn-ecs)
 
 #### Thiết kế ứng dụng
 
-![CloudFormation Architecture](/images/3.1-cloudformation-architecture.png)
+![CloudFormation Architecture](/images/3.1-cloudformation-architecture.svg)
+
 Ứng dụng sẽ được chia thành 2 Stack lớn là VPC và ECS. Mục tiêu khi tách VPC độc lập khỏi ECS cluster để  có thể mở rộng thiết kế cho các dịch vụ khác dùng chung 1 VPC.CloudFormation Stack có tính năng chia sẻ thông tin các tài nguyên để các Stack khác có thể dùng chung. Ví dụ trong bài này, ECS Stack sẽ dùng các thông số `PrivateSubnets` và `VpcId` từ VPC Stack để tạo các tài nguyên.
 
 Các bước để cài đặt ứng dụng:

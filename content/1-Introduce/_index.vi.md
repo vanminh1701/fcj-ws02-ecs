@@ -6,8 +6,6 @@ chapter : false
 pre : " <b> 1. </b> "
 ---
 
-#### Giới thiệu về dịch vụ ECS
-
 ECS là một container Orchestration được quản lý bởi AWS giúp cho dễ dàng triển khai, quản lý và mở rộng các ứng dụng container hóa. ECS được tích hợp với một số công cụ thứ 3 như ECR và docker giúp cho team tập trung phát triển ứng dụng hơn là setup môi trường. Bạn có thể tạo và chạy các ứng dụng trên nhiều Region, on-premise mà không cần quan tâm về phần điều khiển.
 
 #### Kiến trúc hệ thống ECS

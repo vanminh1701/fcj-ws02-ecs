@@ -6,11 +6,11 @@ chapter : false
 pre : " <b>3. </b> "
 ---
 
-Trong phần demo này sẽ đi qua 3 phần chính:
+In this lab, we will go through 3 main parts:
 
-1. Khởi tạo hệ thống với CloudFormation bằng aws cli
-2. Debugging container
-3. Kiểm tra log trên CloudWatch
+1. Initialize the system with CloudFormation using aws cli
+2. Debugging containers
+3. Check logs on CloudWatch and Container Insights
 
 #### Content
 

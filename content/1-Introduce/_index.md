@@ -1,152 +1,152 @@
 ---
-title : "Introduction ECS"
+title : "ECS Introduction"
 date :  "`r Sys.Date()`" 
 weight : 1 
 chapter : false
 pre : " <b> 1. </b> "
 ---
 
-#### Giới thiệu về dịch vụ ECS
+ECS is an AWS managed Container Orchestration that makes it easy to deploy, manage, and scale containerized applications. ECS is integrated with a number of 3rd party tools such as ECR and Docker to help the team focus on application development rather than setting up the environment. You can create and run applications across multiple Regions, on-premise without worrying about controls.
 
-ECS là một container Orchestration được quản lý bởi AWS giúp cho dễ dàng triển khai, quản lý và mở rộng các ứng dụng container hóa. ECS được tích hợp với một số công cụ thứ 3 như ECR và docker giúp cho team tập trung phát triển ứng dụng hơn là setup môi trường. Bạn có thể tạo và chạy các ứng dụng trên nhiều Region, on-premise mà không cần quan tâm về phần điều khiển.
+#### ECS Architecture
 
-#### Kiến trúc hệ thống ECS
+ECS includes 3 layers:
 
-ECS gồm có 3 layer:
-
-- Capacity: hệ thống nơi bạn triển khai các container, có thể là EC2, Fargate hoặc on-premise
-- Controller: phần AWS quản lý giúp triển khai và quản lý các container
-- Provisioning: Các công cụ để tương tác với controller: console, CLI, SDK, Copilot, CDK
+- Capacity - system where you deploy containers, it can be EC2, Fargate or on-premise
+- Controller - the AWS management section helps deploy and manage containers
+- Provisioning - tools to interact with the controller: Console, CLI, SDK, Copilot, CDK
   
 ![ECS 3 layer Architecture](/images/1.1-ecs-3-layers.png)
 
-Đối với Capacity layer, ECS cung cấp 3 tùy chọn EC2, Fargate và On-premise. Tuy vào nhu cầu mục đích mà bạn lựa chọn loại capacity cho phù hợp:
+For Capacity layer, ECS provides 3 options: EC2, Fargate and On-premise. Depending on your needs and purposes, you can choose the appropriate capacity:
 
-|          | Đặc tính | Ưu điểm | Nhược điểm |
+|          | Specification | Advantage | Disadvantage |
 | ---------|---------|---------|---------|
-| EC2      | Sử dụng dịch vụ AWS EC2 để chạy các máy ảo chứa cái ứng dụng container | Tối ưu về chi phí khi hệ thống đã vận hành ổn định | Tốn nổ lực vận hành, giám sát, nâng cấp hệ thống |
-| Fargate   | Là 1 dịch vụ container Serverless mà AWS quản lý về hệ thống | Không cần quan tâm về hệ thống bên dưới, khả năng mở rộng lớn | Giá thành cao hơn khi dùng EC2 |
-|On-premise | kết nối các máy chủ bên ngoài AWS, phục vụ cho mục đích đặc thù | | |
+| EC2      | Using AWS EC2 service to run virtual machines containing container applications | Optimizing costs when the system is operating stably | It takes effort to operate, monitor, and upgrade the system |
+| Fargate   | Be a Serverless container service that AWS manages the system | No need to worry about the underlying system, great scalability | The price is higher when using EC2 |
+|On-premise | connecting servers outside of AWS, for specific purposes | | |
 
-#### Vòng đời ứng dụng
 
-Hình dưới đây mô tả cách một úng dụng container hoạt động với ECS: 
+#### Application Lifecycle
+
+The following show how a container application works with ECS:
 
 ![Application lifecycle](/images/1.2-ecs-application-lifecycle.png)
 
-  1. Ứng dụng của bạn phải được đóng gói thành các docker image, có thể được lưu trữ trên ECR hoặc docker registry nào đó để ECS có thể truy cập để tải docker image.
-  2. Sau khi có image, bạn cần tạo một *Task definition,* là một bản thảo cho cấu hình cài đặt như: thông tin image, các thông số của OS, port sử dụng, bộ lưu trữ, thông số kết nối, …
-  3. Để triển khai các container, bạn tạo một Service/ Task trong các cluster. Cluster được hiểu là các service hoặc task được tập hợp với nhau được vận hành trên các Capacity Provider đã đăng ký với nó. Cluster sẽ đọc task definition và triển khai các container tương ứng. Bạn có thể chạy nhiều task bằng ECS service để đảm duy trì và đảm bảo số lượng task chạy đồng thời trong cluster.
-Ngoài ra đối với EC2 Capacity, ECS sẽ cần có một *container agent* trên từng máy chủ với mục đích là gửi các thông tin về task, tài nguyên sử dụng của container để  chạy và tắt các task cũng như giám sát thông số hệ thống.
+  1 Your application must be packaged into Docker images, which can be stored on ECR or some docker registry so that ECS can access it to download the Docker image.
+  2 After having the image, you need to create a *Task definition,* which is a draft for installation configuration such as: image information, OS parameters, used port, storage, connection parameters, …
+  3 To deploy containers, you create a Service/Task in the clusters. Cluster is understood as services or tasks grouped together and operated on Capacity Providers registered with it. The cluster will read the task definition and deploy the corresponding containers. You can run multiple tasks using the ECS service to maintain and ensure the number of tasks running simultaneously in the cluster.
 
-Sau khi container đã hoạt động, bạn có thể  giám sát việc triển khai và ứng dụng bằng các công cụ được AWS hỗ trợ: CloudWatch, Runtime Monitoring.
+In addition, for EC2 Capacity, ECS will need to have a *container agent* on each server with the purpose of sending information about tasks, container resource usage to run and shut down tasks as well as monitor system parameters. system.
+
+Once the container is up and running, you can monitor deployments and applications using tools supported by AWS: CloudWatch, Runtime Monitoring.
 
 #### Cluster
 
-Cluster là một nhóm các task hoặc service liên quan với nhau có thể về chức năng hoặc toàn bộ dự án của bạn, nó bao gồm:
+Cluster is a group of related tasks or services that can be functional or your entire project, it includes:
 
-- Cơ sở hạ tầng có thể là dự kết hợp giữa EC2, Fargate và on-prem.
-- Cấu hình network trong 1 VPC
-- Kết nối với Namespace để hỗ trợ giao tiếp giữa các service trong và ngoài cluster.
-- Tuy chọn giám sát bằng *Container Insight* để thu thập, tổng hợp và tổng kết các thông số và log.
+- Infrastructure can be a combination of EC2, Fargate and on-prem.
+- Configure network in 1 VPC
+- Connect to Namespace to support communication between services inside and outside the cluster.
+- Choose to monitor using *Container Insight* to collect, synthesize and summarize parameters and logs.
 
-Cluster bao gồm nhiều capability provider, được hiểu là một nhóm hệ thống các máy chủ độc lập có chung cấu hình đặc thù và khả năng mở rộng, có thể là một Auto Scaling Group, Fargate provider.
+Cluster includes many capability providers, which can be understood as a group of independent server systems with the same specific configuration and scalability, which can be an Auto Scaling Group, Fargate provider.
 
 | Fargate | EC2 Auto Scaling Group |
 | --------| ---------------------- |
-| Quản lý task bằng Fargate hoặc Fargate Spot (dịch vụ Fargate có giảm giá nhưng không ổn định). Provider này bị một số hạn chế về hỗ trợ OS, thao tác trên Console. | Cluster cung cấp tính năng tự động quản lý số lượng instance trong group và quá trình mở rộng đáp ứng nhu cầu của các service |
+| Manage tasks using Fargate or Fargate Spot (Fargate service has discounts but is not stable). This provider has some limitations in terms of OS support and Console operations. | Cluster provides automatic management of the number of instances in the group and the expansion process to meet the needs of services |
 
 #### Task definition
 
-Là một bản thảo giúp cấu hình các thông số để triển khai 1 hoặc nhiều container trong ECS cluster của bạn, một thông số có thể thay đổi như:
+It is a template that helps configure parameters to deploy 1 or more containers in your ECS cluster, a parameter can be changed as:
 
-- Launch type: xác định ứng dụng sẽ chạy trên loại provider nào
-- Thông tin docker image
-- Thông số CPU, memory cần thiết
-- Hệ điều hành của server
-- Chế độ mạng dùng để kết nối với container
-- Điều kiện task thực thi nhiệm vụ nào đó và tự tắt đi
-- IAM Role giúp tương tác với các dịch vụ AWS khác
-- Cấu hình logging, kho lưu trữ
+- Launch type: determines what type of provider the application will run on
+- Docker image information
+- Necessary CPU and memory parameters
+- Server operating system
+- Network mode used to connect to containers
+- Task condition executes a certain task and turns itself off
+- IAM Role helps interact with other AWS services
+- Configuring logging and storage
 
-Sau khi khởi tạo xong, *Task definition* có thể được áp dụng dưới 2 hình thức:
+After initialization, *Task definition* can be applied in 2 forms:
 
-- Task: là một container để thực thi 1 nhiệm vụ cụ thể  nào đó và tự động tắt đi sau khi thực thi xong
-- Service: là một cơ chế quản lý các container, giúp đảm bảo số lượng container mong muốn thực thi. Nếu 1 task được phát hiện bị lỗi, service schedular của ECS sẽ thực thi cơ chế tạo 1 task mới thay thế và tắt task bị lỗi đi.
+- Task: is a container to execute a specific task and automatically shuts down after completion
+- Service: is a mechanism for managing containers, helping to ensure the desired number of containers is executed. If a task is detected to be faulty, ECS's schedular service will execute a mechanism to create a new task to replace it and shut down the faulty task.
   
-Chế  độ mạng của *task* dùng để cấu hình các cách giao tiếp của container, đặc biệt khi được chạy trong các EC2 instance. Nếu không có yêu cầu đặc thù nào, AWS khuyến khích sử dụng chế độ *awsvpc*:
+*task*'s network mode is used to configure container communications, especially when running in EC2 instances. If there are no specific requirements, AWS recommends using *awsvpc* mode:
 
-- Dối với Fargate, bạn chỉ có thể cấu hình ché độ *awsvpc*
-- Đôi với EC2, bạn co nhiều chế độ hơn và *awsvpc* giúp đơn giản hóa cáu hình mạng để bạn chỉ cần tập trung vào phát triển ứng dụng.
+- For Fargate, you can only configure *awsvpc* mode
+- With EC2, you have more modes and *awsvpc* simplifies network configuration so you only need to focus on application development.
 
-Bảng liệt kê các chế độ mạng
+The lists the network modes
 
 |       Chế  độ          | Mô tả |
 | :--------------------: | ----- |
-|   awsvpc (default)     |  Task được cấp phát 1 ENI và 1 địa chỉ IPv4 riêng, nó cho phép task có đặc tính mạng giống với EC2 instance  |
-|   bridge               | Sử dụng docker network mặc định của dịch vụ docker chạy trong instance |
-|   host                 | Task sẽ bỏ qua Docker network để map container port trực tiếp vào ENI của EC2 instance. Điều này khiển các task giống nhau không thể được triển khai trên cùng 1 instance  |
-|   none                 | Task sẽ không nhận kết nối từ bên ngoài |
+|   awsvpc (default)     |  The task is allocated an ENI and a IPv4 address, which allows the task to have the same network characteristics as the EC2 instance |
+|   bridge               | Use the default docker network of the docker service running in the instance |
+|   host                 | The task will bypass the Docker network to map the container port directly to the ENI of the EC2 instance. This controls that identical tasks cannot be deployed on the same instance  |
+|   none                 | Task will not receive connections from outside |
 
-#### Triển khai một ứng dụng lên ECS cluster
+#### Deploy an application to an ECS cluster
 
-ECS hỗ trợ triển khai ứng dụng theo 3 tùy chọn:
+ECS supports application deployment in 3 options:
 
-- Rolling update: được ECS quản lý bằng service scheduler
-- Blue/Green: được kết hợp với dịch vụ CodeDeploy
-- External: sử dụng các dịch vụ bên thứ 3 để gọi API
+- Rolling update: managed by ECS using service scheduler
+- Blue/Green: combined with CodeDeploy service
+- External: use 3rd party services to call API
   
-Khi sử dụng Console để tạo một service, AWS sẽ chọn mặc định tùy chọn *rolling update* và các cấu hình liên quan để tạo service. Bạn có thể thay đổi tùy chọn trong mục **Deployment options**
+When using the Console to create a service, AWS will default to the *rolling update* option and related configurations to create the service. You can change the options in the **Deployment options** section
 
 ***Rolling update***
 
-Đây là tùy chọn để ECS quản lý quá trình triển khai ứng dụng. Khi bạn thực hiện thay đổi service và kích hoạt triển khai, service scheduler sẽ khỏi tạo một số lượng task mới và có thể tắt một số task cũ đi tùy theo bạn quy định. Sau khi task mới đã ở trạng thái ổn định, ECS sẽ tiến hành tăt hoàn toàn các task cũ và tiến trình hoàn tất. Nếu bạn triển khai dịch vụ kết hợp với một ELB, sau khi task sẵn sàng nhận traffic, ECS sẽ tự động đăng ký task với ELB để chuyển dần traffic sang task mới. Vì vập cần lưu ý việc kiểm trang sức khoẻ của task dể đảm bảo service mới sẵn sàng nhận traffic.
+This is an option for ECS to manage application deployment. When you make service changes and activate deployment, the service scheduler will stop creating a number of new tasks and can turn off some old tasks according to your regulations. After the new task is in a stable state, ECS will completely shut down the old tasks and the process is complete. If you deploy the service in conjunction with an ELB, after the task is ready to receive traffic, ECS will automatically register the task with the ELB to gradually transfer traffic to the new task. Therefore, you need to pay attention to checking the health of the task to ensure the new service is ready to receive traffic.
 
-Bạn có thể cấu hình triển khai theo 2 thông số sau để quy định số lượng task mới và cũ trong quá trình triển khai:
+You can configure deployment according to the following two parameters to specify the number of new and old tasks during deployment:
 
-- *minimumHealthPercent*: số lượng task cũ tối thiểu được giữ lại. Ví dụ giá trị là 75% và đang có 4 task, service scheduler sẽ tắt đi 1 task, giữ lại 3 task và tiến hành tạo task mới
-- *maximumPercent*: xác định số lượng task tối đa cho service, bao gồm task cũ và mới. Ví dụ giá trị 200% và số task mong muốn là 4 thì service scheduler có thể tạo được tối đa là 8 task nên sẽ tạo thêm được 4 task mới chạy song song với 4 task cũ.
+- *minimumHealthPercent*: minimum number of old tasks kept. For example, the value is 75% and there are 4 tasks, the service scheduler will turn off 1 task, keep 3 tasks and create a new task.
+- *maximumPercent*: determines the maximum number of tasks for the service, including old and new tasks. For example, if the value is 200% and the desired number of tasks is 4, the service scheduler can create a maximum of 8 tasks, so it will create 4 new tasks running in parallel with the 4 old tasks.
 
-Khi triển khai ứng dụng, Ứng dụng có thể bị lỗi dẫn tới triển khai ứng dụng không thành công. ECS cung cấp 2 phương pháp để xác định lỗi và tiến hành rollback ứng dụng lại phiên bản cũ là circuit breaker và CloudWatch alarms. Bạn có thể kết hợp cả hai cách để có thể xác định lỗi tốt nhất cho ứng dụng.
+When deploying the application, the Application may have errors leading to application deployment failure. ECS provides two methods to identify errors and rollback applications to old versions: circuit breakers and CloudWatch alarms. You can combine both methods to best identify errors for your application.
 
-- Circuit breaker: ECS sẽ đánh giá trạng thái của từng task và dừng việc triển khai khi số lỗi đạt tới một ngưỡng nhất định.
-- CloudWatch Alarms: đánh giá dựa vào các thông số của ứng dụng. ECS sẽ theo dõi thông số cảnh báo mà bạn cài đặt trước. Khi thông số CloudWatch ở trạng thái ALARM, ECS sẽ rollback ứng dụng của bạn.
+- Circuit breaker: ECS will evaluate the status of each task and stop deployment when the number of errors reaches a certain threshold.
+- CloudWatch Alarms: evaluated based on application parameters. ECS will monitor the alarm parameters you set in advance. When the CloudWatch parameter is in the ALARM state, ECS will rollback your application.
 
-***Blue/Green với CodeDeploy***
+***Blue/Green with CodeDeploy***
 
-Tùy chọn này được kết hợp với dịch vụ CodeDeploy để quản lý và giám sát quá trình triển khai. Với tùy chọn này bạn sẽ có nhiều lựa chọn hơn trong việc phân phối traffic giữa task mới và cũ theo 3 loại sau:
+This option is combined with the CodeDeploy service to manage and monitor the deployment process. With this option you will have more options in distributing traffic between new and old tasks according to the following 3 types:
 
-- Canary: chuyển 1 phần traffic sang task mới và sau 1 khoảng thời gian nhất định, chuyển toàn bộ traffic còn lại sang task mới
-- Linear: chuyển traffic dần theo thời gian. Ví dụ 20% mỗi 5 phút
-- All-at-once: sau khi các task mới đã ởn định, chuyển toàn bộ traffic cùng lúc
+- Canary: transfer part of the traffic to a new task and after a certain period of time, transfer all remaining traffic to the new task
+- Linear: transfers traffic gradually over time. For example 20% every 5 minutes
+- All-at-once: after new tasks have stabilized, transfer all traffic at once
 
-Một số cân nhắc khi dùng Blue/Green:
+Some considerations when using Blue/Green:
 
-- Bạn cần tạo một vài tài nguyên bên dịch vụ CodeDeploy và liên kết với ECS.
-- ECS cần tạo thêm thành phần *task set* để cấu hình cho quá trình triển khai, làm tăng tính phức tạp khi cấu hình.
-- Bắt buộc phải kết nối với một load balancer để có thể quy định phân phối traffic
-- Quá trình này sẽ bị xung đột với việc mở rộng dẫn tới những kết quả không lường trước được. Cho nên cần trành việc triển khai khi hệ thống đang chịu tải lớn.
-
+- You need to create a few resources inside the CodeDeploy service and link them to ECS.
+- ECS needs to create an additional *task set* component to configure the deployment process, increasing the complexity of configuration.
+- Must connect to a load balancer to be able to regulate traffic distribution
+- This process will conflict with expansion leading to unforeseen results. Therefore, it is necessary to avoid deployment when the system is under heavy load.
+  
 ***External***
 
-ECS cung cấp các API để tích hợp với các dịch vụ thứ 3 điều khiển, giám sát quá trình triển khai, ví dụ như Jenkins, ...
+ECS provides APIs to integrate with 3rd party services that control and monitor the deployment process, such as Jenkins,...
 
-#### Tự động mở rộng service
+#### service auto scaling
 
-Đây là khả năng tự tăng giảm số lược task mong muốn một cách tự động. ECS tận dụng dịch vụ Application AUto Scaling để cung cấp tính năng này. ECS sẽ xuất bản các thông số CloudWatch về sử dụng CPU và bộ nhớ của service và bạn có thể dụng những thông số này để mở rộng service của bạn. Application Auto Scaling hỗ trợ 3 loại mở rộng sau:
+This is the ability to automatically increase or decrease the desired number of tasks. ECS leverages the Application AUto Scaling service to provide this feature. ECS will publish CloudWatch metrics about your service's CPU and memory usage, and you can use these metrics to scale your service. Application Auto Scaling supports the following 3 types of scaling:
 
-- *Target tracking metric* - Tăng hoặc giảm số lượng task dựa trên một thông số nhất định. Cơ chế tương tự cách hoạt động của nhiệt kế, đảm bảo cho thông số của service duy trì ở mức nhỏ hơn hoặc bằng một số nhất định.
-- *Step scaling* - thay đổi số lượng task theo một loạt điều chỉnh mở rộng dựa vào kích thước của mức độ vượt quá cảnh báo. Ví dụ vượt quá 20% thì tăng thêm 1 task, 50% thì tăng 3 task. 
-- *schedule scaling* - thay đổi dựa theo thời gian. Ví dụ chạy 5 task vào ban ngày và 1 task vào ban đêm.
+- *Target tracking metric* - Increase or decrease the number of tasks based on a certain parameter. The mechanism is similar to how a thermometer works, ensuring that service parameters remain at a level less than or equal to a certain number.
+- *Step scaling* - changes the number of tasks by a series of scaling adjustments based on the size of the warning breach. For example, if it exceeds 20%, it will add 1 task, if it exceeds 50%, it will increase 3 tasks.
+- *schedule scaling* - changes based on time. For example, run 5 tasks during the day and 1 task at night.
 
-#### Kết nối giữa các service
+#### service-to-service connection
 
-Một trong những cân nhắc khi dùng ECS là làm thế nào để kết nối vào các service bên trong cluster. Đối với truy cập từ internet, bạn có thể kết hợp với 1 Elastic Load Balancer. Và khi bạn muốn kết nối này không đi ra ngoài internet, bạn có thể dùng tính năng kết nối nội bộ bằng Service Connect hoặc Service Discovery.
+One of the considerations when using ECS is how to connect to services within the cluster. For access from the internet, you can combine it with an Elastic Load Balancer. And when you want this connection not to go outside the internet, you can use the internal connection feature using Service Connect or Service Discovery.
 
 - Service Connect
   
-  Dùng cách này để cung cấp khả năng kết nối service tới service bằng việc thiết lập một service discovery và service mesh để tạo một hê thống network cho cluster. Điểm vượt trội của tính năng này là nó dùng service mesh để quản lý network và có thể chuyển kết nối sang các service ở trạng thái tốt khi một service bị lỗi một cách tức thời.
+Use this method to provide service-to-service connectivity by setting up a service discovery and service mesh to create a network for the cluster. The highlight of this feature is that it uses service mesh to manage the network and can instantly switch connections to services in good status when a service fails.
   
 - Service Discovery
   
-  Đây là một cách kết nối truyền thống, nó sẽ tạo ra một hệ thống DNS để lưu IP của từng task và gắn vào một tên miền cụ thể. Bởi vì các DNS này sẽ được cache lại IP mỗi khi truy vấn nên khi có task bị lỗi, service cần đợi tới thời gian hệ hiệu lực của cache và truy vấn thông tin DNS mới nhất thì mới có thể dùng tiếp được. Một điểm nổi bật của hej thống này là cho phép bạn có thể kết nối vào service từ bên ngoài cluster. Ví dụ như bạn có thể gọi đến service từ một EC2 instance không cùng chung network.
+This is a traditional way of connecting, it will create a DNS system to save the IP of each task and attach it to a specific domain name. Because these DNS IPs will be cached every time they are queried, when a task fails, the service needs to wait until the cache is valid and query the latest DNS information before it can continue to be used. A highlight of this system is that it allows you to connect to the service from outside the cluster. For example, you can call the service from an EC2 instance that is not on the same network.

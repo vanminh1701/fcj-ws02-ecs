@@ -6,13 +6,13 @@ chapter : false
 pre : " <b> 3.2 </b> "
 ---
 
-Tương tự như chạy `docker exec` ở các local docker container, bạn có thể chạy các lệnh hoặc truy cập vào container trong các task của ECS service bằng lệnh `aws exec command`. Việc này hỗ trợ trong việc tương tác trực tiếp với container để thực hiện các lệnh kiểm tra container có hoạt động đúng với mong đợi hay không. Bạn có thể tham khảo thêm [tại đây](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html).
+Similar to running `docker exec` in local docker containers, you can run commands or access containers in ECS service tasks with `aws exec command`. This aids in interacting directly with the container to execute commands to check whether the container is working as expected or not. You can refer to this for more information [here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html).
 
-Bài lab này sẽ sử dụng tính năng này để kiểm tra việc cài đặt kết nối mạng giữa service với service bằng cách truy cập vào container này và truy vấn tới container khác bằng tên DNS đã được cấu hình bằng dịch vụ Service Connect được cấu hình [tại đây](https://github.com/vanminh1701/fcj-ws02-cfn-ecs/blob/5d068a323c32613fe7b02be54fee0a62227c4ee6/stacks/task-web.yml#L108)
+This lab will use this feature to test the service-to-service network connection settings by accessing one container and querying another container using the configured DNS name using the configured Service Connect service.[here](https://github.com/vanminh1701/fcj-ws02-cfn-ecs/blob/5d068a323c32613fe7b02be54fee0a62227c4ee6/stacks/task-web.yml#L108)
 
-Điều kiện tiên quyết:
+#### Prerequisites
 
-- Bạn cần bật tính năng này khi khởi tạo service cho task bằng cách cấu hình:
+- You need to enable this feature when initializing the service for the task by configuring:
   
 ```yml
 Service:
@@ -24,7 +24,7 @@ Service:
     ...
 ```
 
-- Đồng thời cần phải điều chỉnh task role để cấp quyền cho ECS Exec, tham khảo [IAM role](https://github.com/vanminh1701/fcj-ws02-cfn-ecs/blob/90c4beff8c29749f25e566d775887c3ae63b2186/stacks/ecs.yml#L176)
+- At the same time, it is necessary to adjust the task role to grant permissions to ECS Exec, refer to [IAM role](https://github.com/vanminh1701/fcj-ws02-cfn-ecs/blob/90c4beff8c29749f25e566d775887c3ae63b2186/stacks/ecs.yml#L176)
   
 ```yml
 Effect: Allow
@@ -35,7 +35,7 @@ Action:
   - ssmmessages:OpenDataChannel
 ```
   
-- Khi service ở trạng thái `RUNNING`, bạn có thể truy cập vào container bằng lệnh
+- When the service is in the `RUNNING` state, you can access the container using the command
   
 ```sh
 aws ecs execute-command \
@@ -46,9 +46,9 @@ aws ecs execute-command \
   --interactive
 ```
 
-  Lưu ý thay `arn:aws:ecs:us-east-1:471112666427:task/workshop-02/bf23faa8b0ba412bb721c00121caaffe` bằng *taskId* và `workshop-02` bằng tên của ECS cluster bạn đạ tạo
+Note, replace `arn:aws:ecs:us-east-1:471112666427:task/workshop-02/bf23faa8b0ba412bb721c00121caaffe` with *taskId* and `workshop-02` with the name of the ECS cluster you created
 
-- Bây giờ đã có thể truy cập vào container của **api** service. Bạn có thể truy vấn đến **web** service
+- The **api** service container can now be accessed. You can query the **web** service
   
 ```sh
 aws ecs execute-command
@@ -59,6 +59,6 @@ aws ecs execute-command
   --interactive
 ```
 
-Sử dụng `ping -c5 api-svc.workshop-02` để kiểm tra kết nối với API service.
+Use `ping -c5 api-svc.workshop-02` to test the connection to the API service.
 
 ![ECS Exec command](/images/3.6-exec-cmd.png)
