@@ -1,9 +1,9 @@
 ---
-title : "Monitor"
+title : "Application Demo"
 date : "`r Sys.Date()`"
 weight : 3
 chapter : false
-pre : " <b> 3.3 </b> "
+pre : " <b>3. </b> "
 ---
 
 Trong phần demo này sẽ đi qua 3 phần chính:
@@ -14,6 +14,6 @@ Trong phần demo này sẽ đi qua 3 phần chính:
 
 #### Content
 
-1. [Introduction ECS](./3.1-run-cfn/)
-2. [Introduction CloudFormation](./3.2-container-exec-cmd/)
-3. [Application Demo](./3.3-monitor/)
+1. [Setup CloudFormation](./3.1-run-cfn/)
+2. [ECS Exec](./3.2-container-exec-cmd/)
+3. [Monitor](./3.3-monitor/)
