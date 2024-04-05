@@ -1,6 +1,5 @@
 # Change the default theme to be use when building the site with Hugo
 theme = "hugo-theme-learn"
-baseURL="https://vanminh1701.github.io/fcj-ws02-cfn-ecs-docs"
 
 # For search functionality
 [outputs]
