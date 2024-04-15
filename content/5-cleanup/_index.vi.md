@@ -1,8 +1,8 @@
 ---
 title: "Clean up"
 date: "`r Sys.Date()`"
-weight: 4
-pre: "<b>4. </b>"
+weight: 5
+pre: "<b>5. </b>"
 ---
 
 Một ưu điểm khi quản lý hạ tầng bằng CloudFormation là các tài nguyên sẽ được tập trung quản lý trong các *stack*. Vì vậy bạn có thể dễ dàng tắt hệ thống đi khi không cần dùng đến cho hệ thống chỉ chạy trong khung giờ cố định, hoặc không dùng đến hệ thống này nữa.

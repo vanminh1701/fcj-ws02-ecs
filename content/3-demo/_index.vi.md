@@ -1,5 +1,5 @@
 ---
-title : "Ứng dụng Demo"
+title : "Triển khai Ứng dụng"
 date : "`r Sys.Date()`"
 weight : 3
 chapter : false

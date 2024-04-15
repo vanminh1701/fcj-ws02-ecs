@@ -1,8 +1,8 @@
 ---
 title: "Clean up"
 date: "`r Sys.Date()`"
-weight: 4
-pre: "<b>4. </b>"
+weight: 5
+pre: "<b>5. </b>"
 ---
 
 One advantage of managing infrastructure with CloudFormation is that resources will be centrally managed in *stacks*. Therefore, you can easily turn off the system when you do not need it or let the system only run during a fixed time frame, or no longer use this system.
@@ -15,7 +15,6 @@ An example notification is as shown below:
 When deleting the parent stack, the nested stacks will be deleted, so you just need to delete the ECS stack and then the VPC stack.
 
 To delete a stack, access the CloudFormation Console, select the Stack you want to delete and select **Delete** in the right pane in the detailed description of the stack.
-
 
 ![Remove stack](/images/4.2-remove-stack.png)
 
