@@ -81,7 +81,7 @@ After initialization, *Task definition* can be applied in 2 forms:
 
 The lists the network modes
 
-|       Chế  độ          | Mô tả |
+|       Mode          | Description |
 | :--------------------: | ----- |
 |   awsvpc (default)     |  The task is allocated an ENI and a IPv4 address, which allows the task to have the same network characteristics as the EC2 instance |
 |   bridge               | Use the default docker network of the docker service running in the instance |
