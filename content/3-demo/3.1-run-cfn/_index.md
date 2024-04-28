@@ -12,7 +12,7 @@ This section will go into the steps to deploy an application applying the knowle
 
 - On the machine you have installed the AWS CLI and configured the connection with an IAM user with sufficient rights.
 
-- Use the following Github Repo templates: [fcj-ws02-cfn-ecs](https://github.com/vanminh1701/fcj-ws02-cfn-ecs)
+- Use the following Github Repo templates: [Github link](https://github.com/vanminh1701/fcj-ws02-cfn-ecs)
 
 #### Application Architecture
 

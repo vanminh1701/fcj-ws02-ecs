@@ -18,3 +18,5 @@ In this workshop, we will show an overview of the Amazon ECS service, the compon
 3. [Application Demo](3-demo)
 4. [Disaster Recovery Strategy](4-dr/)
 5. [Clean up](5-cleanup/)
+
+![Architecture](/images/ws02-Architecture.drawio.svg)

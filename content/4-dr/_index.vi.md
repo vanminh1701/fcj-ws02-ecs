@@ -1,5 +1,5 @@
 ---
-title : "Disaster Recovery Strategy"
+title : "Chiến lược khắc phục thảm họa"
 date : "`r Sys.Date()`"
 weight : 4
 chapter : false
@@ -9,6 +9,7 @@ pre : " <b> 4. </b> "
 Phục hồi thảm họa là quá trình chuẩn bị và khắc phục các sự cố bất ngờ khiến trang web không thể hoạt động bình thường. Những sự kiện đó có thể là mất điện tử, lỗi của con người đối với tài nguyên, lỗi phần cứng hoặc phần mềm độc hại từ tin tặc. Điều này đòi hỏi phải chạy cơ sở hạ tầng thứ cấp và xử lý lưu lượng truy cập trong khi chúng tôi đang sửa chữa cơ sở hạ tầng chính.
 
 Thông thường, hầu hết các tài nguyên trong AWS đều hỗ trợ tính sẵn sàng cao ở nhiều Vùng sẵn sàng trong cùng một Khu vực. Ví dụ: khi triển khai Cân bằng tải ứng dụng, bạn có thể chọn triển khai trên mọi AZ trong Khu vực và khi một AZ ngừng hoạt động, ALB vẫn có sẵn trên các AZ khác. Khi bạn làm việc với Auto Scaling Group, nếu trên AZ không thành công, ASG sẽ tạo ra các phiên bản mới trên các AZ khác để đạt được công suất mong muốn.
+
 ![Disaster Recovery strategies](/images/4.4-disaster-recovery-strategies.png)
 
 AWS đã phân loại các chiến lược khắc phục thảm họa thành 4 phương pháp:
@@ -69,15 +70,13 @@ Resources:
             RepositoryFilters:
               - Filter: !Ref Ws02Repository
                 FilterType: PREFIX_MATCH
-
 ```
 
-#### Setup CloudFormation StackSet
+#### Khởi tạo CloudFormation StackSet
 
 CloudFormation giúp triển khai hệ thống trên nhiều Region một cách nhanh chóng và quản lý tập trung các stack. CloudFormation StackSet hỗ trợ gắn các thông số input cho stack, nhưng bạn cũng có thể ghi đè các thông số cho một Region cụ thể trong cấu hình `StackInstancesGroup`.
 
 ```yml
-
   ECSStackSet:
     Type: 'AWS::CloudFormation::StackSet'
     DependsOn: VPCStackSet
@@ -118,5 +117,4 @@ CloudFormation giúp triển khai hệ thống trên nhiều Region một cách 
           ParameterOverrides:
             - ParameterKey: BucketName
               ParameterValue: tvm-cf-templates-tokyo
-
 ```

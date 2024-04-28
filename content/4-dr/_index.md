@@ -9,6 +9,7 @@ pre : " <b> 4. </b> "
 Disaster Recovery is the process of preparing and recovering on unexpected events that prevent website working normally. Those events can be electronic outage, human failures on resources, hardware failure or malware from hacker. This requires a secondary infrastructure run and handle traffic while we are fixing the primary infrastructure.
 
 Normally, almost resources in AWS support high availability in multiple Availability Zone in same Region. For example, when you deploy a Application Load Balancer, you can select to deploy on every AZ in Region, and when one AZ is outage, the ALB is still available on other AZs. When you work with Auto Scaling Group, if on AZ failed, ASG will spin up new instances on other AZs to reach the desired capability.
+
 ![Disaster Recovery strategies](/images/4.4-disaster-recovery-strategies.png)
 
 AWS categorized disaster recovery strategies into 4 approaches:
@@ -69,15 +70,13 @@ Resources:
             RepositoryFilters:
               - Filter: !Ref Ws02Repository
                 FilterType: PREFIX_MATCH
-
 ```
 
-#### Setup CloudFormation StackSet
+#### Initiate CloudFormation StackSet
 
 CloudFormation help you deploy infrastructure to multiple regions quickly and centralize the stack. CloudFormation StackSet support input parameters for each stack, but you can also override parameters for specific region in the `StackInstancesGroup` configuration.
 
 ```yml
-
   ECSStackSet:
     Type: 'AWS::CloudFormation::StackSet'
     DependsOn: VPCStackSet
@@ -118,5 +117,4 @@ CloudFormation help you deploy infrastructure to multiple regions quickly and ce
           ParameterOverrides:
             - ParameterKey: BucketName
               ParameterValue: tvm-cf-templates-tokyo
-
 ```

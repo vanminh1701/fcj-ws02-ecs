@@ -16,5 +16,7 @@ Trong bài viết này sẽ giới thiệu về  tổng quan về dịch vụ Am
 1. [Giới thiệu ECS](1-introduce/)
 2. [Giới thiệu CloudFormation](2-intro-cloudformation/)
 3. [Ứng dụng Demo](3-demo)
-4. [Disaster Recovery Strategy](4-dr/)
+4. [Chiến lược khắc phục thảm họa](4-dr/)
 5. [Clean up](5-cleanup/)
+
+![Architecture](/images/ws02-Architecture.drawio.svg)
